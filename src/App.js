@@ -14,7 +14,7 @@ function App() {
 
   async function handleAddRepository() {
     const response = await api.post('repositories', {
-      title: 'Title of repo'
+      title: `Title of repo ${Date.now()}`
     })
 
     const repository = response.data
@@ -27,9 +27,9 @@ function App() {
 
     await api.delete(`repositories/${repositories[repositoryIndex].id}`)
 
-    const repository = repositories
+    repositories.splice(repositoryIndex, 1)
 
-    setRepositories([...repositories, repository])
+    setRepositories([...repositories])
   }
 
   return (
@@ -37,14 +37,14 @@ function App() {
       <ul data-testid="repository-list">
         {repositories.map(repository => {
           return (
-            <li key={repository.id}>{repository.title}
-            <button key={repository.id} onClick={() => handleRemoveRepository(repository.id)}>
-              Remover
-            </button>
+            <li key={repository.id}>
+              {repository.title}
+              <button key={repository.id} onClick={() => handleRemoveRepository(repository.id)}>
+                Remover
+              </button>
             </li>
-          )  
-        } )}
-
+          )
+        })}
       </ul>
 
       <button onClick={handleAddRepository}>Adicionar</button>
